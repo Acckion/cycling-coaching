@@ -1,0 +1,13 @@
+interface:
+  display_name: 骑行教练 · Intervals.icu
+  short_description: 结合实时训练负荷、功率与恢复数据，分析骑行执行并制定个人计划
+  default_prompt: 使用 $cycling-coaching，结合我最新的Intervals.icu数据分析训练并调整后续计划。
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg
+policy:
+  allow_implicit_invocation: true
+  products:
+  - chatgpt
+  - codex
+  - api
+  - atlas
