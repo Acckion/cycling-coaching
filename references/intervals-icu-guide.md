@@ -2,6 +2,10 @@
 
 Tool names differ across STAS, the community Intervals MCP and future official connectors. Discover the live schemas; capability mapping below is guidance, not a list of callable functions guaranteed to exist. Use available connectors before browser automation; do not request credentials when access already works.
 
+## Durable coaching destinations
+
+Read athlete profile and current coach journal from Intervals.icu user notes. Activity reviews belong in their activities; weekly summaries in weekly NOTE events; monthly summaries in a separate month-labeled section of the weekly NOTE containing the month's last day. Confirm exact user-note read/update support before using it. Preserve all existing personal text through fresh read, scoped merge and read-back verification. Use direct Intervals.icu tools for persistence; STAS serves as a read/connection bridge. Do not use STAS-owned profile, goals, strategy, review or other persistent write endpoints. Tool names and STAS internal caching require current verification. Follow [longitudinal coaching](longitudinal-coaching.md) for recovery and concurrent updates.
+
 ## Read
 
 - STAS coaching: `get_user_summary`, then `get_trainings` for a suitable bounded history (at least 14 days for analysis; about 60 for new strategies when present). Its `newest` boundary is exclusive; for date D use D to D+1. Use selected `get_activity_detail` for a deep dive, not every activity.

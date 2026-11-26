@@ -1,6 +1,6 @@
 # Longitudinal coaching: activity, week and month
 
-Use the connected training platform as the durable coaching record across chats and devices. The skill supplies the workflow; an independent athlete profile holds stable personal context, while goals, activity notes and calendar summaries hold evolving state. Do not store live FTP, recovery, load, routes, availability or health context as skill defaults. Do not create an automation or claim unattended monitoring unless the user requests one and it is actually configured.
+Use the connected training platform as the durable coaching record across chats and devices. The skill supplies the workflow; Intervals.icu user notes hold the athlete profile and current coach journal in separate owned sections, while activity notes and weekly calendar summaries hold detailed evidence. Do not store live FTP, recovery, load, routes, availability or health context as skill defaults. Do not create an automation or claim unattended monitoring unless the user requests one and it is actually configured.
 
 ## Post-ride closed loop: review, decide, apply, verify
 
@@ -18,31 +18,38 @@ Before changing a workout, retrieve the existing upcoming calendar and its curre
 
 Preserve a recoverable before-state and unrelated event fields. Validate the changed workout’s total duration, power-zone targets and work/recovery structure, save, and read back the event. Update the same event where supported; an ambiguous timeout requires retrieval before retry. Do not duplicate sessions or silently shift dates. Follow connector requirements and any applicable approval rules.
 
-When a future workout actually changes, mention the affected date and the new prescription in one concise sentence. Do not write routine statuses such as `无需修改`, before/after audit trails or verification mechanics into the activity note. If a write fails, tell the user in chat and provide the proposed replacement; do not turn the failed operation into durable coaching content. Reflect material week/block changes in the existing weekly/provisional monthly note without duplicating the full activity analysis.
+When a future workout actually changes, mention the affected date and the new prescription in one concise sentence. Do not write routine statuses such as `无需修改`, before/after audit trails or verification mechanics into the activity note. If a write fails, tell the user in chat and provide the proposed replacement; do not turn the failed operation into durable coaching content. Reflect material week/block changes in the current journal and relevant weekly note without duplicating the full activity analysis.
 
 This skill update itself does not call for changing today’s actual workouts or populating past logs.
 
-## Three record layers
+## Durable records and cross-chat recovery
 
-| Layer | Canonical destination | Update when | Useful content |
+| Record | Canonical destination | Update when | Content |
 |---|---|---|---|
-| Activity review | Coach section inside the completed activity's notes/description | After a substantive review or when a correction changes the coaching conclusion | Delivered main work, athlete response, coaching interpretation and next step |
-| Weekly summary | Calendar NOTE titled `教练周总结｜YYYY-MM-DD—YYYY-MM-DD` | When reviewing the week or planning the next; label partial weeks as provisional | Delivered dose, key-session execution, load/recovery trajectory, trends and next-week priorities |
-| Monthly summary / state | Calendar NOTE titled `教练月总结｜YYYY-MM` | At a monthly review, or update the current month's provisional entry after material changes | Goal, current block, demonstrated capability, current limiter status, modeled trends, next review and open questions |
+| Athlete profile | Athlete profile section in Intervals.icu user notes | Confirmed durable changes | Background, goals, preferences, sustainable availability, equipment and authorization |
+| Coach journal | Coach journal section in the same Intervals.icu user notes | Material feedback, corrections or decisions | Updated-at date, current phase, capability evidence, active limiters, decisions and reasons, temporary constraints and review dates, open questions and intake progress |
+| Activity review | Coach section in the corresponding completed activity | Substantive review | Delivered work, athlete response, interpretation and next action |
+| Weekly summary | Corresponding weekly calendar NOTE | Week review or planning | Covered dates, actual dose, execution, recovery and next priorities |
+| Monthly summary | Separate month-labeled section within the weekly NOTE containing the month's last calendar day | Monthly review | Natural-month evidence, trends, conclusions and direction |
 
-Do not make an extra permanent stage-summary layer duplicating the monthly record. Monthly notes carry stage/state information; an in-progress month is explicitly `截至 YYYY-MM-DD，暂定`, not a completed month. Do not fill missing historical months with invented reviews. Use local dates/week boundaries, and keep a partial week's/month's covered period explicit.
+Use the athlete's local week convention and preserve existing weekly event identity. A cross-month week's weekly totals and the natural month's totals have separate explicit date ranges. Label incomplete summaries provisional. Update the same weekly NOTE while preserving its other sections. Existing separate historical monthly notes remain valid evidence; migration or deletion requires authorization.
+
+The coach journal carries current state. Keep it concise and replace superseded conclusions; retain dated material direction changes with evidence links. Resolve expired temporary constraints, preserve unresolved questions and record which intake answers are already known. Keep detailed historical evidence in activity and weekly/monthly notes.
 
 ## Read before coaching
 
-Follow connector-required context/history retrieval; journal retrieval supplements it, not replaces it. Then:
+1. Read the athlete profile and coach journal from Intervals.icu user notes at the start of a chat and before consequential training decisions. Follow applicable connector retrieval requirements.
+2. Read relevant weekly/monthly sections and key activity notes, then refresh current thresholds/zones, actual training and load, recovery and future sessions. Read new activity since the journal's update, expanding history when needed.
+3. Reconcile contradictions against dated evidence and current athlete corrections. Retrieve raw laps/streams only when execution or a disputed measurement requires it.
+4. Continue the existing block with an explicit next check. In long chats, checkpoint material changes promptly and reread persisted state before subsequent important decisions. A new chat alone does not reset the block or restart intake.
 
-1. Read the latest available monthly state and relevant weekly summary. If no monthly summary exists, use available weekly/activity records and state that context is incomplete.
-2. Read activity coach notes for the most recent relevant key sessions and any unresolved question affecting the prescription.
-3. Refresh live thresholds/zones, actual CTL/ATL/Form, recent actual activity and recovery. Distinguish these from stored snapshots and projected planned load.
-4. Fetch raw laps/streams only where execution, conflicting measurements or comparisons require verification. Do not repeatedly reanalyze every old ride, but do not rely on prose when the underlying data contradicts it.
-5. Identify what changed since the last assessment and why the next session should stay, progress or ease off. Do not redesign a block merely because the chat is new.
+Discover tools that read user notes, completed activity descriptions and historical calendar NOTE events. A future-workout list can omit past summaries and training lists can truncate notes. If the exact field cannot be read or updated, report the concrete gap and keep the pending text available without claiming persistence.
 
-Discover tools that actually read activity notes and calendar NOTE events. A future planned-workout list may omit past summaries; a training list may truncate descriptions. Absence from either response is not proof that no journal exists. Handle retrieval gaps internally; mention them to the user only when they materially limit the requested decision.
+## Persist through Intervals.icu
+
+Use direct Intervals.icu tools for coaching records. STAS is a connection/read bridge; do not use STAS-owned profile, goals, strategy, review or other persistent write tools. Its internal caching is outside the skill's control and requires separate verification.
+
+Before writing, reread the destination and merge only the current change into the coach-owned section. Preserve personal prose, existing profile data and updates from other chats. Use version checks when exposed, then read back. A read-merge-write flow without an atomic version check cannot guarantee exclusion of simultaneous writers; investigate a detected conflict instead of overwriting it. Keep profile and current journal in the same user-note update where supported. Multi-record updates have separate verified outcomes; report incomplete saves. Initial read-only intake rules still apply.
 
 ## Activity note: concise coaching review
 
@@ -73,7 +80,7 @@ Record covered dates and whether complete/provisional, sources/activity IDs, ded
 
 Summarize dated CTL/ATL/Form start/end or trajectory with source and absolute/% convention. Add sleep/RHR/HRV and subjective recovery trends only when covered. State material power/HRSS/FTP changes that limit comparison. Record what worked, unresolved uncertainties and 1–2 priorities for the next week, including why progression is or is not warranted. Do not silently treat a missing day as zero training or a good recovery day.
 
-## Monthly review and current state
+## Monthly review
 
 Include:
 
@@ -84,7 +91,7 @@ Include:
 - Modeled trends below, interpretation limits, and conditions for changing the next block. Retain unresolved data contradictions.
 - Next review date or trigger. Later feedback supersedes earlier impressions; keep a concise correction trail when a material decision changes.
 
-Do not create a final monthly conclusion early. At a material mid-month change, update the provisional current-month note or relevant weekly note rather than a parallel monthly duplicate.
+Do not create a final monthly conclusion early. At a material mid-month change, update the current coach journal and relevant weekly section. Store the monthly review in the last week's NOTE with its natural-month coverage dates.
 
 ## Trend tracking: retain existing Health-page definitions
 
